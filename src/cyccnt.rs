@@ -30,12 +30,16 @@ impl Instant {
     /// *HEADS UP* this function can, and will, return nonsensical values if called within `init`.
     /// Only use it in `idle` and tasks. In `init`, use the `init::Context.start` field, or the
     /// `CYCCNT::zero` function, instead of this function
-    pub const fn now() -> Self {
+    pub fn now() -> Self {
         Instant {
             inner: DWT::get_cycle_count() as i32,
         }
     }
 
+    pub const fn zero() -> Instant {
+        Instant { inner: 0 }
+    }
+    
     /// Returns the amount of time elapsed since this instant was created.
     pub fn elapsed(&self) -> Duration {
         let diff = Instant::now().inner.wrapping_sub(self.inner);
